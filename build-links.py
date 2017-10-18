@@ -1,13 +1,14 @@
 #!/usr/bin/env python3
 
 import os
+import sys
 import subprocess
 
 # Things in the container I want to link. These must be in the default path
 #/usr/games/
 #irssi
 
-commands = ["irssi", "ls", "bash"]
+commands = ["irssi", "ls", "bash", "vi"]
 paths = ["/usr/games"]
 
 # Directories of stuff
@@ -21,4 +22,18 @@ for x in paths:
         commands.append(docker_file)
 
 for i in commands:
-    os.symlink("../run-command.sh", "commands/%s" % i)
+    the_command = "commands/%s" % i
+    try:
+        # Does the file exist?
+        os.stat(the_command)
+        # Remove it if it's there
+        if os.path.islink(the_command):
+            os.unlink(the_command)
+        else:
+            # Something horrible has happened
+            print("%s isn't a symlink, exiting" % the_command)
+            sys.exit(1)
+    except FileNotFoundError:
+        pass
+
+    os.symlink("../run-command.py", the_command)
