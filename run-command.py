@@ -14,11 +14,6 @@ homedir=os.path.join(os.getenv("HOME"), 'docker-home:/home/container')
 
 the_command = os.path.basename(sys.argv[0])
 
-# docker run --rm -i -v $HOME/docker-home:/home/container -u container -t linux-commands $command $@
-#
-
-#cmd = ['docker', 'run', '--rm', '-i', '-v', homedir, '-u', 'container', '-t', 'linux-commands', the_command]
-
 
 # XXX: I'm unsure if we can do this nicely with docker, if we claim a tty,
 # we can't pipe from stdin
@@ -30,4 +25,4 @@ else:
     cmd = ['docker', 'run', '--rm', '-a', 'stdin', '-a', 'stdout', '-a', 'stderr', '-i', '-v', homedir, '-u', 'container', '-t', 'linux-commands', the_command]
 
 cmd.extend(sys.argv[1:])
-output = subprocess.run(cmd)
+os.execve('/usr/local/bin/docker', cmd, os.environ)
