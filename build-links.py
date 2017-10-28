@@ -8,7 +8,7 @@ import subprocess
 #/usr/games/
 #irssi
 
-commands = ["irssi", "ls", "bash", "vi"]
+commands = ["irssi", "ls", "bash", "vi", "xeyes", "xlogo", "xmille"]
 paths = ["/usr/games"]
 
 # Directories of stuff
